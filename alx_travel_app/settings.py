@@ -11,9 +11,14 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
+import environ
+import os
+
+env = environ.Env()
+environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+# BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 # Quick-start development settings - unsuitable for production
@@ -23,7 +28,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-qopcegwb9td@%9vgewnnoz*7a5a1v*ww4_dhoe2lcxg*!qde)9'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = env.bool('DEBUG', default=False)
 
 ALLOWED_HOSTS = []
 
@@ -54,12 +59,8 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",
-    # add other origins as needed
-]
 
-ROOT_URLCONF = 'alxtravelapp.urls'
+ROOT_URLCONF = 'alx_travel_app.urls'
 
 TEMPLATES = [
     {
@@ -68,6 +69,7 @@ TEMPLATES = [
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
+                'django.template.context_processors.debug',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
@@ -76,17 +78,11 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'alxtravelapp.wsgi.application'
+WSGI_APPLICATION = 'alx_travel_app.wsgi.application'
 
 
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
-
-import environ
-import os
-
-env = environ.Env()
-environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 
 DATABASES = {
     'default': {
@@ -96,6 +92,9 @@ DATABASES = {
         'PASSWORD': env('DB_PASSWORD'),
         'HOST': env('DB_HOST'),
         'PORT': env('DB_PORT'),
+        'OPTIONS': {
+            'init_command': "SET sql_mode=@STRICT_TRANS_TABLES'",
+        }
     }
 }
 
@@ -134,9 +133,22 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Django REST Framework configuration (optional, customize as needed)
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.AllowAny',
+    ],
+}
+
+# CORS configuration
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",
+    # add other origins as needed
+]
