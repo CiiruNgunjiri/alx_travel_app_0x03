@@ -1,10 +1,16 @@
 from django.core.management.base import BaseCommand
-from listings.models import Listing
+from alx_travel_app.listings.models import Listing
 from django.contrib.auth.models import User
 import random
 
 class Command(BaseCommand):
     help = 'Seed the database with sample listings'
+
+    def add_arguments(self, parser):
+        parser.add_argument(
+        '--listings', type=int, default=15,
+        help='Number of listings to create'
+    )
 
     def handle(self, *args, **kwargs):
         # Create or get a default user to own listings
