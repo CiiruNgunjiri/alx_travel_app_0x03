@@ -2,6 +2,8 @@ from django.core.management.base import BaseCommand
 from alx_travel_app.listings.models import Listing
 from django.contrib.auth.models import User
 import random
+from alx_travel_app.listings.serializers import ListingSerializer
+
 
 class Command(BaseCommand):
     help = 'Seed the database with sample listings'

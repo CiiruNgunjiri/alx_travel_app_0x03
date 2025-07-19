@@ -4,6 +4,7 @@ from django.contrib.auth import logout
 from django.shortcuts import redirect
 from django.views.decorators.http import require_GET
 
+
 def index(request):
     return JsonResponse({"message": "Welcome to ALX Travel Listings API"})
 
