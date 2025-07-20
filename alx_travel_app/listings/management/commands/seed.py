@@ -1,18 +1,16 @@
 from django.core.management.base import BaseCommand
 from alx_travel_app.listings.models import Listing
 from django.contrib.auth.models import User
-import random
-from alx_travel_app.listings.serializers import ListingSerializer
-
+from django.db import IntegrityError
 
 class Command(BaseCommand):
     help = 'Seed the database with sample listings'
 
     def add_arguments(self, parser):
         parser.add_argument(
-        '--listings', type=int, default=15,
-        help='Number of listings to create'
-    )
+            '--listings', type=int, default=15,
+            help='Number of listings to create'
+        )
 
     def handle(self, *args, **kwargs):
         # Create or get a default user to own listings
@@ -25,13 +23,24 @@ class Command(BaseCommand):
             # Add more sample data as needed
         ]
 
+        created_count = 0
         for item in sample_listings:
-            Listing.objects.create(
-                title=item['title'],
-                description=item['description'],
-                price_per_night=item['price_per_night'],
-                host=user,
-                location=item['location']
-            )
+            try:
+                obj, created = Listing.objects.get_or_create(
+                    title=item['title'],
+                    description=item['description'],
+                    price_per_night=item['price_per_night'],
+                    host=user,
+                    location=item['location']
+                )
+                if created:
+                    created_count += 1
+                    self.stdout.write(self.style.SUCCESS(f"Listing '{obj.title}' created successfully"))
+                else:
+                    self.stdout.write(self.style.WARNING(f"Listing '{obj.title}' already exists - skipped"))
+            except IntegrityError as e:
+                self.stdout.write(self.style.ERROR(f"Could not create listing '{item['title']}': {e}"))
+            except Exception as e:
+                self.stdout.write(self.style.ERROR(f"Unexpected error: {e}"))
 
-        self.stdout.write(self.style.SUCCESS('Successfully seeded listings'))
+        self.stdout.write(self.style.SUCCESS(f"Successfully seeded {created_count} listings"))
