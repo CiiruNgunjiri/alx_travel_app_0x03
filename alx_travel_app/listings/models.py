@@ -8,6 +8,9 @@ class Listing(models.Model):
     host = models.ForeignKey(User, on_delete=models.CASCADE, related_name='listings')
     location = models.CharField(max_length=255)
     created_at = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        unique_together = ('title', 'host')
 
     def __str__(self):
         return self.title

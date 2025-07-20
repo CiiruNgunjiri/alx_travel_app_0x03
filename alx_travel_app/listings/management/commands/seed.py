@@ -13,14 +13,12 @@ class Command(BaseCommand):
         )
 
     def handle(self, *args, **kwargs):
-        # Create or get a default user to own listings
-        user, created = User.objects.get_or_create(username='default_host')
+        user, _ = User.objects.get_or_create(username='default_host')
 
         sample_listings = [
             {'title': 'Cozy Cottage', 'description': 'A cozy place in the woods.', 'price_per_night': 80.00, 'location': 'Forestville'},
             {'title': 'City Apartment', 'description': 'Modern apartment in the city center.', 'price_per_night': 120.00, 'location': 'Downtown'},
             {'title': 'Beach House', 'description': 'Sunny beachfront property.', 'price_per_night': 200.00, 'location': 'Seaside'}
-            # Add more sample data as needed
         ]
 
         created_count = 0
@@ -28,10 +26,12 @@ class Command(BaseCommand):
             try:
                 obj, created = Listing.objects.get_or_create(
                     title=item['title'],
-                    description=item['description'],
-                    price_per_night=item['price_per_night'],
                     host=user,
-                    location=item['location']
+                    defaults={
+                        'description': item['description'],
+                        'price_per_night': item['price_per_night'],
+                        'location': item['location'],
+                    }
                 )
                 if created:
                     created_count += 1
@@ -42,5 +42,4 @@ class Command(BaseCommand):
                 self.stdout.write(self.style.ERROR(f"Could not create listing '{item['title']}': {e}"))
             except Exception as e:
                 self.stdout.write(self.style.ERROR(f"Unexpected error: {e}"))
-
         self.stdout.write(self.style.SUCCESS(f"Successfully seeded {created_count} listings"))
