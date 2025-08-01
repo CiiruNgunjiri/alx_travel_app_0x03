@@ -44,7 +44,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     'drf_yasg',
-    'alx_travel_app.listings',
+    'listings.apps.ListingsConfig',
     'django_seed',
 ]
 

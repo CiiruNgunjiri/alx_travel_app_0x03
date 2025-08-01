@@ -1,4 +1,4 @@
-# alx_travel_app_0x00
+# alx_travel_app_0x01
 
 An Airbnb-inspired travel backend platform built with Django.  
 Manage listings, bookings, and reviews via RESTful APIs.
@@ -89,6 +89,65 @@ python manage.py runserver
 Open [http://localhost:8000](http://localhost:8000) to explore your API.
 ---
 
+## 📖 API Documentation
+Interactive API documentation is auto-generated with Swagger/OpenAPI using drf-yasg:
+
+Swagger UI: http://localhost:8000/swagger/
+Try out endpoints interactively with clear request/response details.
+
+ReDoc UI: http://localhost:8000/redoc/
+Alternative clean API docs presentation.
+
+### OpenAPI Spec:
+
+JSON: /swagger.json
+
+YAML: /swagger.yaml
+
+You can download the OpenAPI spec above to import into tools like Postman.
+
+### 🔧 Usage
+Interact with your API endpoints, e.g.:
+
+| Endpoint             | HTTP Method | Description                     |
+|----------------------|-------------|---------------------------------|
+| /api/listings/       | GET         | List all listings               |
+| /api/listings/{id}/  | GET         | Get details for a single listing|
+| /api/bookings/       | POST        | Create a new booking            |
+| /api/reviews/        | POST        | Submit a listing review         |
+
+>Use authentication via Django REST Framework's session login available at /api-auth/login/.
+
+### 🧪 Testing the API with Postman
+Download your API specification:
+http://localhost:8000/swagger.json or swagger.yaml.
+
+Open Postman → Click Import → Upload the spec file.
+
+Postman generates a fully functional collection with all API endpoints.
+
+Customize requests, add authentication if needed, and run test calls.
+
+Save requests in collections and automate tests by adding JavaScript in the Tests tab.
+
+For manual requests, for example a GET request to list all listings:
+URL: http://localhost:8000/api/listings/
+Method: GET
+Click Send and verify the JSON response.
+
+### 🎯 Best Practices for API Documentation
+>Keep your Swagger/OpenAPI docs up to date with every API change.
+
+>Add meaningful docstrings and operation descriptions in your viewsets (swagger_auto_schema decorator).
+
+>Provide example requests and responses to improve usability.
+
+>Document authentication flows clearly (token/session).
+
+>Group endpoints logically with tags in your API docs.
+
+>Use clear, jargon-free language to assist all users.
+
 ## 📦 Usage
 
 Interact with the API endpoints (to be added via Django REST Framework views):
@@ -113,6 +172,6 @@ This project is licensed under the MIT License.
 
 ## 📅 Last Updated
 
-Saturday, July 19, 2025
+Friday, August 1st, 2025
 ---
 *Made with ♥ by ciiru_ngunjiri*
