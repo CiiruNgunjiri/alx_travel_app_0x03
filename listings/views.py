@@ -5,8 +5,9 @@ from django.shortcuts import redirect
 from django.views.decorators.http import require_GET
 
 from drf_yasg.utils import swagger_auto_schema
-from rest_framework import viewsets
+from rest_framework import viewsets, filters
 from listings.models import Listing, Booking
+from .forms import ListingForm
 from listings.serializers import ListingSerializer, BookingSerializer
 
 class ListingViewSet(viewsets.ModelViewSet):
@@ -20,8 +21,11 @@ class ListingViewSet(viewsets.ModelViewSet):
     create:
     Create a new listing.
     """
-    queryset = Listing.objects.all()
+    queryset = Listing.objects.filter(available=True)
     serializer_class = ListingSerializer
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+    search_fields = ['title', 'description', 'location']
+    ordering_fields = ['price_per_night', 'created_at']
 
     @swagger_auto_schema(operation_summary="List all listings")
     def list(self, request, *args, **kwargs):
