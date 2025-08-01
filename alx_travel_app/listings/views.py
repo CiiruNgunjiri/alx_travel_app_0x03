@@ -9,7 +9,6 @@ from rest_framework import viewsets, filters
 from listings.models import Listing, Booking
 from listings.serializers import ListingSerializer, BookingSerializer
 
-
 def index(request):
     return JsonResponse({"message": "Welcome to ALX Travel Listings API"})
 
