@@ -12,7 +12,10 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 from pathlib import Path
 import environ
+from dotenv import load_dotenv
 import os
+
+load_dotenv()  # load all env variables
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -168,3 +171,7 @@ SWAGGER_SETTINGS = {
         }
     },
 }
+
+CHAPA_SECRET_KEY = os.getenv('CHAPA_SECRET_KEY')
+CHAPA_API_URL = 'https://api.chapa.co/v1/transaction/initialize'  # Chapa payment initialize URL
+CHAPA_VERIFY_URL = 'https://api.chapa.co/v1/transaction/verify/'  # plus transaction id for verification
