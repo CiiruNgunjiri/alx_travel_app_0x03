@@ -49,6 +49,8 @@ INSTALLED_APPS = [
     'drf_yasg',
     'listings.apps.ListingsConfig',
     'django_seed',
+    'django_celery_results',
+    'django_celery_beat',
 ]
 
 MIDDLEWARE = [
@@ -176,14 +178,28 @@ CHAPA_SECRET_KEY = os.getenv('CHAPA_SECRET_KEY')
 CHAPA_API_URL = 'https://api.chapa.co/v1/transaction/initialize'  # Chapa payment initialize URL
 CHAPA_VERIFY_URL = 'https://api.chapa.co/v1/transaction/verify/'  # plus transaction id for verification
 
-# settings.py
-
+# RabbitMQ as the message broker URL
 CELERY_BROKER_URL = 'amqp://guest:guest@localhost//'
-CELERY_RESULT_BACKEND = 'rpc://'
 
-# Optionally add these:
+# Result backend to store task results (optional but useful for monitoring)
+CELERY_RESULT_BACKEND = 'rpc://'  
+
+# Content and serialization formats
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
+
+# Timezone and UTC settings
 CELERY_TIMEZONE = 'UTC'
 CELERY_ENABLE_UTC = True
+
+# Optional: If using Django database for storing task results or for celery beat schedules
+# 'django_celery_results' and 'django_celery_beat' should be in INSTALLED_APPS
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.yourprovider.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'your-email@example.com'
+EMAIL_HOST_PASSWORD = 'your-email-password'
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
