@@ -2,6 +2,7 @@ from celery import shared_task
 from django.core.mail import send_mail
 import os
 from celery import Celery
+from django.conf import settings
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'alx_travel_app.settings')
 
@@ -19,4 +20,4 @@ def debug_task(self):
 def send_payment_confirmation_email(email, booking_reference):
     subject = "Booking Payment Confirmation"
     message = f"Your payment for booking {booking_reference} was successful."
-    send_mail(subject, message, 'no-reply@yourdomain.com', [email])
+    send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [email], fail_silently=False)

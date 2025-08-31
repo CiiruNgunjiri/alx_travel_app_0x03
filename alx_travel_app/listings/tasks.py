@@ -10,3 +10,9 @@ def send_booking_confirmation_email(to_email, booking_details):
     from_email = settings.DEFAULT_FROM_EMAIL
 
     send_mail(subject, message, from_email, [to_email])
+
+@shared_task
+def send_payment_confirmation_email(email, booking_reference):
+    subject = "Booking Payment Confirmation"
+    message = f"Your payment for booking {booking_reference} was successful."
+    send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [email], fail_silently=False)
