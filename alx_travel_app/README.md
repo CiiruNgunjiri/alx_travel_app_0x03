@@ -159,6 +159,153 @@ Interact with the API endpoints (to be added via Django REST Framework views):
 Test API calls using tools like [Postman](https://www.postman.com/) or `curl`.
 ---
 
+# alx_travel_app_0x03
+
+A Django-based travel booking application with asynchronous task processing configured using Celery with RabbitMQ. This project handles sending booking confirmation emails asynchronously via background tasks.
+
+---
+
+## Setup Instructions
+
+### 1. Prerequisites
+
+- Python 3.13+ installed  
+- RabbitMQ server installed and running  
+- Virtual environment tool (`venv` or similar)  
+- Redis is NOT required for this version (RabbitMQ is used as broker)  
+
+---
+
+### 2. Clone and Prepare the Project
+
+git clone https://github.com/yourusername/alx_travel_app_0x03.git
+cd alx_travel_app_0x03/alx_travel_app
+
+python -m venv env
+
+Activate the virtual environment:
+Windows:
+env\Scripts\activate
+
+Linux/macOS:
+source env/bin/activate
+
+pip install -r requirements.txt
+
+text
+
+---
+
+### 3. RabbitMQ Setup
+
+Install and start RabbitMQ server:
+
+- **Ubuntu/Debian:**
+
+sudo apt update
+sudo apt install rabbitmq-server
+sudo systemctl start rabbitmq-server
+sudo systemctl enable rabbitmq-server
+
+text
+
+- **Windows / macOS:**  
+  See [RabbitMQ Download](https://www.rabbitmq.com/download.html) for instructions.
+
+---
+
+### 4. Project Configuration
+
+Review `alx_travel_app/settings.py`:
+
+CELERY_BROKER_URL = 'amqp://guest:guest@localhost//'
+CELERY_RESULT_BACKEND = 'rpc://'
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'UTC'
+CELERY_ENABLE_UTC = True
+
+Email backend configuration example:
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.yourmailserver.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'your-email@example.com'
+EMAIL_HOST_PASSWORD = 'your-password'
+DEFAULT_FROM_EMAIL = 'your-email@example.com'
+
+---
+
+### 5. Running Django and Celery
+
+Open terminals for each process.
+
+- Start RabbitMQ server if not running:
+
+sudo systemctl start rabbitmq-server
+
+- Start Django development server:
+
+python manage.py runserver
+
+- Start Celery worker:
+
+celery -A alx_travel_app worker -l info
+
+- Optionally start Celery Beat scheduler:
+
+celery -A alx_travel_app beat -l info
+
+---
+
+### 6. Creating a Booking and Verifying Email
+
+- Create bookings via UI or API.
+- The booking triggers an async email task.
+- Check Celery worker terminal logs for task processing.
+- Confirm receipt of booking confirmation emails.
+
+---
+
+### 7. Logs and Debugging
+
+- Celery logs output in worker terminal.
+- Email sending failures will appear as errors.
+- Check Django logs for backend issues.
+
+---
+
+### 8. Project Structure Highlights
+
+alx_travel_app/
+│
+├── alx_travel_app/ # Django project settings and celery.py
+├── listings/ # App with booking models, views, and tasks
+├── manage.py
+├── requirements.txt
+└── README.md
+
+---
+
+### 9. Dependencies
+
+Django>=4.0
+celery[rabbitmq]>=5.0
+rabbitmq-server
+requests
+gql
+
+---
+
+## Contact and Support
+
+Please open an issue or pull request on the GitHub repository for questions or contributions.
+
+---
+
+> _Developed and maintained using Visual Studio Code._
+
 ## 🤝 Contributing
 
 Contributions, issues, and feature requests are welcome!  
@@ -172,6 +319,6 @@ This project is licensed under the MIT License.
 
 ## 📅 Last Updated
 
-Friday, August 1st, 2025
+Sunday, August 31st, 2025
 ---
 *Made with ♥ by ciiru_ngunjiri*

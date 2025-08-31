@@ -15,6 +15,7 @@ from rest_framework import viewsets, filters
 from listings.models import Listing, Booking, Payment
 from listings.serializers import ListingSerializer, BookingSerializer
 
+from .tasks import send_booking_confirmation_email
 
 def create_booking(request):
     if request.method == 'POST':
@@ -100,6 +101,14 @@ class BookingViewSet(viewsets.ModelViewSet):
     def create(self, request, *args, **kwargs):
         return super().create(request, *args, **kwargs)
 
+    def perform_create(self, serializer):
+        booking = serializer.save()
+
+        # Prepare booking details string
+        booking_details = f"Booking ID: {booking.id}\nDate: {booking.date}\nDetails: {booking.other_fields}"
+
+        # Trigger async email sending
+        send_booking_confirmation_email.delay(booking.user.email, booking_details)
 
 @csrf_exempt
 def initiate_payment(request):

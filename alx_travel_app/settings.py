@@ -175,3 +175,15 @@ SWAGGER_SETTINGS = {
 CHAPA_SECRET_KEY = os.getenv('CHAPA_SECRET_KEY')
 CHAPA_API_URL = 'https://api.chapa.co/v1/transaction/initialize'  # Chapa payment initialize URL
 CHAPA_VERIFY_URL = 'https://api.chapa.co/v1/transaction/verify/'  # plus transaction id for verification
+
+# settings.py
+
+CELERY_BROKER_URL = 'amqp://guest:guest@localhost//'
+CELERY_RESULT_BACKEND = 'rpc://'
+
+# Optionally add these:
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'UTC'
+CELERY_ENABLE_UTC = True
