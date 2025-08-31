@@ -192,8 +192,6 @@ source env/bin/activate
 
 pip install -r requirements.txt
 
-text
-
 ---
 
 ### 3. RabbitMQ Setup
